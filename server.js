@@ -6,13 +6,6 @@ const app = express()
 app.engine('.hbs', hbs())
 app.set('view engine', '.hbs')
 
-// app.use((req, res, next) => {
-// 	res.show = name => {
-// 		res.sendFile(path.join(__dirname, `/views/${name}`))
-// 	}
-// 	next()
-// })
-
 app.use('/user', (req, res, next) => {
 	res.send('<h1>You need to login first</h1>')
 	next()
@@ -22,19 +15,31 @@ app.use(express.static(path.join(__dirname, '/public')))
 
 const homePaths = ['/', '/home']
 app.get(homePaths, (req, res) => {
-	res.render('index', { layout: false })
+	res.render('index')
 })
 
 app.get('/about', (req, res) => {
-	res.render('about', { layout: false })
+	res.render('about')
+})
+
+app.get('/history', (req, res) => {
+	res.render('history')
+})
+
+app.get('/info', (req, res) => {
+	res.render('info')
+})
+
+app.get('/contact', (req, res) => {
+	res.render('contact')
 })
 
 app.get('/hello/:name', (req, res) => {
-	res.render('hello', { layout: false, name: req.params.name })
+	res.render('hello', { name: req.params.name })
 })
 
 app.use((req, res) => {
-	res.status(404).render('notFound', { layout: false })
+	res.status(404).render('notFound')
 })
 
 app.listen(8000, () => {
