@@ -6,12 +6,12 @@ const app = express()
 app.engine('.hbs', hbs())
 app.set('view engine', '.hbs')
 
-app.use((req, res, next) => {
-	res.show = name => {
-		res.sendFile(path.join(__dirname, `/views/${name}`))
-	}
-	next()
-})
+// app.use((req, res, next) => {
+// 	res.show = name => {
+// 		res.sendFile(path.join(__dirname, `/views/${name}`))
+// 	}
+// 	next()
+// })
 
 app.use('/user', (req, res, next) => {
 	res.send('<h1>You need to login first</h1>')
@@ -22,11 +22,11 @@ app.use(express.static(path.join(__dirname, '/public')))
 
 const homePaths = ['/', '/home']
 app.get(homePaths, (req, res) => {
-	res.show('index.html')
+	res.render('index', { layout: false })
 })
 
 app.get('/about', (req, res) => {
-	res.show('about.html')
+	res.render('about', { layout: false })
 })
 
 app.get('/hello/:name', (req, res) => {
@@ -34,7 +34,7 @@ app.get('/hello/:name', (req, res) => {
 })
 
 app.use((req, res) => {
-	res.status(404).show('notFound.html')
+	res.status(404).render('notFound', { layout: false })
 })
 
 app.listen(8000, () => {
