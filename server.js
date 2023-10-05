@@ -3,6 +3,18 @@ const path = require('path')
 const hbs = require('express-handlebars')
 
 const app = express()
+
+const multer = require('multer')
+const storage = multer.diskStorage({
+	destination: (req, file, cb) => {
+		cb(null, 'public/uploads')
+	},
+	filename: (req, file, cb) => {
+		cb(null, file.originalname)
+	},
+})
+const upload = multer({ storage: storage })
+
 app.engine('.hbs', hbs())
 app.set('view engine', '.hbs')
 
@@ -13,7 +25,6 @@ app.use('/user', (req, res, next) => {
 
 app.use(express.static(path.join(__dirname, '/public')))
 app.use(express.urlencoded({ extended: false }))
-// app.use(express.json())
 
 const homePaths = ['/', '/home']
 app.get(homePaths, (req, res) => {
@@ -40,15 +51,15 @@ app.get('/hello/:name', (req, res) => {
 	res.render('hello', { name: req.params.name })
 })
 
-app.post('/contact/send-message', (req, res) => {
+app.post('/contact/send-message', upload.single('design'), (req, res) => {
 	const { author, sender, title, message } = req.body
+	const design = req.file
 
-	if(author && sender && title && message) {
-		res.render('contact', { isSent: true });
-	  }
-	  else {
-		res.render('contact', { isError: true });
-	  }
+	if (author && sender && title && design && message) {
+		res.render('contact', { isSent: true, image: design.filename })
+	} else {
+		res.render('contact', { isError: true })
+	}
 })
 
 app.use((req, res) => {

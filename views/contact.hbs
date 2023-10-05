@@ -4,6 +4,9 @@
 	<div class='isSent'>
 		The message has been sent!
 	</div>
+	<div>Image sent:
+		<img src='/uploads/{{image}}' alt={{image}} width='50' height='60' />
+	</div>
 {{/if}}
 
 {{#if isError}}
@@ -12,7 +15,7 @@
 	</div>
 {{/if}}
 
-<form action='/contact/send-message' method='POST'>
+<form action='/contact/send-message' enctype='multipart/form-data' method='POST'>
 	<label>
 		Your name:
 		<input type='text' name='author' />
@@ -24,6 +27,10 @@
 	<label>
 		Title:
 		<input type='text' name='title' />
+	</label>
+	<label>
+		Project design:
+		<input type='file' accept='.png, .jpeg, .jpg, .gif' name='design' />
 	</label>
 	<label>
 		Message:
